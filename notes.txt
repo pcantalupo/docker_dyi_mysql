@@ -1,0 +1,19 @@
+Tried to build Docker image inside of ubuntu:latest image with followinng commands
+$ docker run --rm --name bar -it ubuntu bash
+apt-get update
+apt-get install -y python3 mysql-server curl
+service mysql start
+service mysql status  # it is running!!
+curl https://raw.githubusercontent.com/pcantalupo/docker_dyi_mysql/master/setup.sql > setup.sql
+curl http://phamerator.webfactional.com/databases_Hatfull/Actinobacteriophage.sql > ./Actinobacteriophage.sql
+mysql < setup.sql
+mysql -u root --password=foo Actinobacteriophage < Actinobacteriophage.sql
+mysql -u root --password=foo -e 'select * from Actinobacteriophage.gene limit 0,2;'
+curl -O https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+bash Miniconda3-latest-Linux-x86_64.sh -b -p $HOME/miniconda
+cd root/miniconda/bin/
+./conda update -y conda
+./conda config --set auto_activate_base false  # pdm_utils install instructions
+./conda create -y --name pdm_utils python pip biopython pymysql paramiko tabulate curl sqlalchemy  #pdm
+./conda activate pdm_utils # pdm instr; but this fails. See https://pythonspeed.com/articles/activate-conda-dockerfile/ for solution. Not sure if this solution works for travis
+
